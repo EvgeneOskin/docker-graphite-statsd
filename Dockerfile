@@ -1,5 +1,5 @@
-FROM phusion/baseimage:0.9.18
-MAINTAINER Nathan Hopkins <natehop@gmail.com>
+FROM resin/rpi-raspbian:wheezy
+MAINTAINER Eugene Oskin <eoskin@crystalnix.com>
 
 #RUN echo deb http://archive.ubuntu.com/ubuntu $(lsb_release -cs) main universe > /etc/apt/sources.list.d/universe.list
 RUN apt-get -y update\
@@ -21,6 +21,8 @@ RUN apt-get -y --force-yes install vim\
  python-cairo\
  pkg-config\
  nodejs
+
+RUN apt-get install -y gcc
 
 # python dependencies
 RUN pip install django==1.5.12\
@@ -78,6 +80,7 @@ ADD conf/etc/my_init.d/01_conf_init.sh /etc/my_init.d/01_conf_init.sh
 RUN apt-get clean\
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ADD bin/my_init /bin/my_init
 # defaults
 EXPOSE 80 2003-2004 2023-2024 8125/udp 8126
 VOLUME ["/opt/graphite/conf", "/opt/graphite/storage", "/etc/nginx", "/opt/statsd", "/etc/logrotate.d", "/var/log"]
